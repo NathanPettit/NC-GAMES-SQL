@@ -1,9 +1,10 @@
 const db = require("../db/connection.js");
 
 exports.fetchAllReviews = () => {
-  let queryStr = `SELECT COUNT(*) comment_count FROM reviews
-                  JOIN comments.comment_id
-                  WHERE reviews.review_id = comments.review_id`;
+  let queryStr = `SELECT * FROM reviews;`;
+  // let queryStr = `SELECT COUNT(*) comments.comment_id FROM comments
+  //                 JOIN comments.comment_id
+  //                 WHERE reviews.review_id = comments.review_id`;
 
   return db.query(queryStr).then(({ rows }) => {
     if (rows.length === 0) {
