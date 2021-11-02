@@ -91,10 +91,9 @@ describe("GET/reviews:review_id", () => {
 });
 
 describe("PATCH /api/reviews/:review_id", () => {
-  it("status:200, responds with the updated review", () => {
+  it("status:200, responds with the updated votes", () => {
     const reviewUpdates = {
-      title: "Animal Crossing: New Horizons",
-      review_body: "Tom Nook made me bankrupt",
+      inc_votes: 7,
     };
     return request(app)
       .patch("/api/reviews/3")
@@ -103,14 +102,38 @@ describe("PATCH /api/reviews/:review_id", () => {
       .then(({ body }) => {
         expect(body.review).toEqual({
           review_id: 3,
+          title: "Ultimate Werewolf",
+          review_body: "We couldn't find the werewolf!",
           designer: "Akihisa Okui",
           owner: "bainesface",
           review_img_url:
             "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
           category: "social deduction",
           created_at: "2021-01-18T00:00:00.000Z",
-          votes: 5,
-          ...reviewUpdates,
+          votes: 12,
+        });
+      });
+  });
+  it("status:200, works with down votes", () => {
+    const reviewUpdates = {
+      inc_votes: -100,
+    };
+    return request(app)
+      .patch("/api/reviews/3")
+      .send(reviewUpdates)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.review).toEqual({
+          review_id: 3,
+          title: "Ultimate Werewolf",
+          review_body: "We couldn't find the werewolf!",
+          designer: "Akihisa Okui",
+          owner: "bainesface",
+          review_img_url:
+            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          category: "social deduction",
+          created_at: "2021-01-18T00:00:00.000Z",
+          votes: -95,
         });
       });
   });

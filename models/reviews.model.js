@@ -1,7 +1,9 @@
 const db = require("../db/connection.js");
 
 exports.fetchAllReviews = () => {
-  let queryStr = `SELECT * FROM reviews`;
+  let queryStr = `SELECT COUNT(*) comment_count FROM reviews
+                  JOIN comments.comment_id
+                  WHERE reviews.review_id = comments.review_id`;
 
   return db.query(queryStr).then(({ rows }) => {
     if (rows.length === 0) {
@@ -30,17 +32,15 @@ exports.fetchReviewById = (review_id) => {
 };
 
 exports.updateReviewById = (body, id) => {
-  const { title, review_body } = body;
+  const votes = body.inc_votes;
+  console.log(votes);
   return db
     .query(
-      "UPDATE reviews SET title = $1, review_body = $2 WHERE review_id = $3 RETURNING *;",
-      [title, review_body, id]
+      "UPDATE reviews SET votes = votes+$1 WHERE review_id = $2 RETURNING *;",
+      [votes, id]
     )
 
     .then(({ rows }) => {
-      console.log(id);
-      console.log(body);
-      console.log(rows);
       return rows[0];
     });
 };
