@@ -21,7 +21,6 @@ exports.getReviewById = (req, res) => {
 
 exports.patchReviewById = (req, res) => {
   const body = req.body;
-  console.log(req.body);
   const id = req.params;
   updateReviewById(body, id.review_id).then((review) => {
     return res.status(200).send({ review });

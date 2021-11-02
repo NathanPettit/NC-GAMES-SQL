@@ -38,7 +38,7 @@ describe("GET/categories", () => {
   });
 });
 
-describe("GET/reviews", () => {
+describe.only("GET/reviews", () => {
   it("Status:200 an array of reviews", () => {
     return request(app)
       .get("/api/reviews")
@@ -50,12 +50,12 @@ describe("GET/reviews", () => {
           expect(review).toEqual(
             expect.objectContaining({
               title: expect.any(String),
-              designer: expect.any(String),
+              created_at: expect.any(String),
               owner: expect.any(String),
               review_img_url: expect.any(String),
-              review_body: expect.any(String),
               category: expect.any(String),
               votes: expect.any(Number),
+              comment_count: expect.any(String),
             })
           );
         });
